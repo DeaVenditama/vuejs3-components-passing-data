@@ -2,11 +2,11 @@
   <form class="form-pengeluaran" @submit.prevent="catat" >
     <div>
       <label>Pengeluaran</label>
-      <input v-model="pengeluaran" type="number" id="pengeluaran">
+      <input v-model="state.pengeluaran" type="number" id="pengeluaran">
     </div>
     <div>
       <label>Keterangan</label>
-      <input v-model="keterangan" type="text" id="keterangan">
+      <input v-model="state.keterangan" type="text" id="keterangan">
     </div>
     <div>
       <button>Catat!</button>
@@ -15,24 +15,31 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+
 export default {
-  data(){
-    return{
-      pengeluaran: null,
-      keterangan: null,
-    }
-  },
-  methods:{
-    catat(){
-      this.$emit('entri-pengeluaran', {
-        nominal : this.pengeluaran,
-        keterangan: this.keterangan,
+  setup(props, context){
+    const state = reactive({
+      pengeluaran : null,
+      keterangan : null
+    });
+
+    function catat()
+    {
+      context.emit('entri-pengeluaran', {
+        nominal : state.pengeluaran,
+        keterangan: state.keterangan,
       });
-      this.pengeluaran = null;
-      this.keterangan = null;
+      state.pengeluaran = null;
+      state.keterangan = null;
       document.getElementById("pengeluaran").focus();
     }
-  }
+
+    return{
+      state,
+      catat
+    }
+  },
 }
 </script>
 
